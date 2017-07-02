@@ -1,5 +1,5 @@
 
-/* Includes ------------------------------------------------------------------*/
+
 #include "nec_fsm.h"
 #include "FreeRTOS.h"
 #include "queue.h"
@@ -171,43 +171,32 @@ void tick_soft_timer()
    }
    int timeout=0;
    enum nec_fsm_inputs fsm_input;
-
-   if(5==softTimer.cnt) {
-       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_RESET);
-   }
    
    if(40==softTimer.cnt ) {
        timeout=1;
        fsm_input = NEC_IN_2_T056;
-       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
    }
    if(120==softTimer.cnt) {
        timeout=1;
        fsm_input = NEC_IN_3_T169;
-       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_RESET);
    }   
    if(200==softTimer.cnt) {
        timeout=1;
        fsm_input = NEC_IN_4_T225;
-       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
    }   
    if(350==softTimer.cnt) {
        timeout=1;
        fsm_input = NEC_IN_5_T450;
-       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_RESET);
    }
    if(650==softTimer.cnt) {
        timeout=1;
        fsm_input = NEC_IN_6_T900;
-       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
-       //softTimer.cnt=0;
    }
    
    if(timeout) {
      proc_nec_fsm(fsm_input);
    }
 }
-
 
 enum nec_fsm_state state_table[NEC_IN_CNT][NEC_ST_CNT]={
 //                     NEC_ST_0_WAIT_SYNC1   NEC_ST_1_SYNC1       NEC_ST_2_SYNC1_9_MS  NEC_ST_3_WAIT_SYNC2     NEC_ST_4_SYNC2_2_25_MS  NEC_ST_5_SYNC2_4_5_MS  NEC_ST_6_DATA_BIT         NEC_ST_7_DATA_BIT_560_US  NEC_ST_8_WAIT_BIT_PAUSE    NEC_ST_9_BIT_PAUSE_560_US    NEC_ST_10_BIT_PAUSE_1_69_MS  NEC_ST_11_ACK_BIT                NEC_ST_12_ACK_BIT_PASSED_560_US    
